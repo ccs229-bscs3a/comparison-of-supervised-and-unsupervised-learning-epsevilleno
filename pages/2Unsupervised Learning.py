@@ -34,7 +34,7 @@ def app():
     if st.button("Begin"):
         # Load the Iris dataset
         milk_data = pd.read_csv('milk_grade.csv')
-        X = milk_data.drop(['Grade'])  # Features, dropping the Grade colum
+        X = milk_data.drop(['Grade'], axis = 1)  # Features, dropping the Grade colum
         y = milk_data['Grade']  # Target
 
         # Define the K-means model with 3 clusters (known number of species)
@@ -86,12 +86,12 @@ def app():
         for label, color in zip(unique_labels, colors):
             indices = y_pred == label
             # Use ax.scatter for consistent plotting on the created axis
-            ax.scatter(X[indices, 0], X[indices, 6], label=milk_data['Grade'], c=color)
+            ax.scatter(X.iloc[indices, 0], X.iloc[indices, 1], label=f'Grade {label}', c=color)
 
         # Add labels and title using ax methods
         ax.set_xlabel('pH Level')
-        ax.set_ylabel('Turbidity')
-        ax.set_title('pH Level vs Turbidity Colored by Predicted Milk Grade')
+        ax.set_ylabel('Temperature')
+        ax.set_title('pH Level vs Temperature Colored by Predicted Milk Grade')
 
         # Add legend and grid using ax methods
         ax.legend()
