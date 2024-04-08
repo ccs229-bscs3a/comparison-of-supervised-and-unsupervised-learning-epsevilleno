@@ -14,7 +14,7 @@ import time
 # Define the Streamlit app
 def app():
 
-    st.subheader('Supervised Learning, Classification, and KNN with Iris Dataset')
+    st.subheader('Supervised Learning, Classification, and KNN with Milk Grade Dataset')
     text = """**Supervised Learning:**
     \nSupervised learning is a branch of machine learning where algorithms learn from labeled data. 
     This data consists of input features (X) and corresponding outputs or labels (y). The algorithm learns a 
@@ -26,25 +26,16 @@ def app():
     point based on its features.
     \n**K-Nearest Neighbors (KNN):**
     KNN is a simple yet powerful algorithm for both classification and regression tasks. 
-    \n**The Iris Dataset:**
-    The Iris dataset is a popular benchmark dataset in machine learning. It contains information about 150 
-    iris flowers from three different species: Iris Setosa, Iris Versicolor, and Iris Virginica. 
-    Each flower is described by four features:
-    * Sepal length (cm)
-    * Sepal width (cm)
-    * Petal length (cm)
-    * Petal width (cm)
-    \n**KNN Classification with Iris:**
-    \n1. **Training:**
-    * The KNN algorithm stores the entire Iris dataset (features and labels) as its training data.
-    \n2. **Prediction:**
-    * When presented with a new iris flower (unknown species), KNN calculates the distance (often Euclidean distance) 
-    between this flower's features and all the flowers in the training data.
-    * The user defines the value of 'k' (number of nearest neighbors). KNN identifies the 'k' closest 
-    data points (flowers) in the training set to the new flower.
-    * KNN predicts the class label (species) for the new flower based on the majority vote among its 
-    'k' nearest neighbors. For example, if three out of the five nearest neighbors belong to Iris Setosa, 
-    the new flower is classified as Iris Setosa.
+    \n**The Milk Grade Dataset:**
+    The Milk Grade dataset contains the following features that determines the grade or quality of a milk sample:
+    * pH 
+    * Temperature
+    * Taste
+    * Odor
+    * Fat
+    * Turbidity
+    * Colour
+    * Grade
     **Choosing 'k':**
     The value of 'k' significantly impacts KNN performance. A small 'k' value might lead to overfitting, where the 
     model performs well on the training data but poorly on unseen data. Conversely, a large 'k' value might not 
@@ -64,9 +55,9 @@ def app():
 
     if st.button("Begin"):
         # Load the Iris dataset
-        iris = datasets.load_iris()
-        X = iris.data  # Features
-        y = iris.target  # Target labels (species)
+        milk_data = pd.read_csv('milk_grade.csv')
+        X = milk_data.drop(['Grade'])  # Features, dropping the Grade colum
+        y = milk_data['Grade']  # Target
 
         # KNN for supervised classification (reference for comparison)
 
@@ -93,12 +84,12 @@ def app():
         for label, color in zip(unique_labels, colors):
             indices = y_pred == label
             # Use ax.scatter for consistent plotting on the created axis
-            ax.scatter(X[indices, 0], X[indices, 1], label=iris.target_names[label], c=color)
+            ax.scatter(X[indices, 0], X[indices, 6], label=milk_data['Grade'], c=color)
 
         # Add labels and title using ax methods
-        ax.set_xlabel('Sepal length (cm)')
-        ax.set_ylabel('Sepal width (cm)')
-        ax.set_title('Sepal Length vs Width Colored by Predicted Iris Species')
+        ax.set_xlabel('pH Level')
+        ax.set_ylabel('Turbidity')
+        ax.set_title('pH Level vs Turbidity Colored by Predicted Milk Grade')
 
         # Add legend and grid using ax methods
         ax.legend()
