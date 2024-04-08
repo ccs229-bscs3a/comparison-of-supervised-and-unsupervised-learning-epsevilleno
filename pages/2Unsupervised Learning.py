@@ -14,35 +14,28 @@ import time
 # Define the Streamlit app
 def app():
 
-    st.subheader('K-means clustering applied to the Iris Dataset')
-    text = """This is a classic example of unsupervised learning task. The Iris dataset contains 
-    information about Iris flowers (sepal length, sepal width, petal length, petal width) but 
-    doesn't have labels indicating the flower species (Iris Setosa, Iris Versicolor, 
-    Iris Virginica). K-means doesn't use these labels during clustering.
-    \n* **K-means Clustering:** The algorithm aims to group data points into a predefined 
+    st.subheader('K-means clustering applied to the Milk Grade Dataset')
+    text = """**K-means Clustering:** The algorithm aims to group data points into a predefined 
     number of clusters (k). It iteratively assigns each data point to the nearest cluster 
     centroid (center) and recomputes the centroids based on the assigned points. This process 
     minimizes the within-cluster distances, creating groups with similar characteristics.
-    In essence, K-means helps uncover inherent groupings within the Iris data based on their 
-    features (measurements) without relying on predefined categories (flower species). 
+    In essence, K-means helps uncover inherent groupings within the Milk Grade data based on their 
+    features (measurements) without relying on predefined categories (Grade). 
     This allows us to explore how well the data separates into natural clusters, potentially 
     corresponding to the actual flower species.
     \n* Choosing the optimal number of clusters (k) is crucial. The "elbow method" 
     helps visualize the trade-off between increasing clusters and decreasing improvement 
     in within-cluster distances.
     * K-means is sensitive to initial centroid placement. Running the algorithm multiple times 
-    with different initializations can help identify more stable clusters.
-    By applying K-means to the Iris dataset, we gain insights into the data's underlying structure 
-    and potentially validate the separability of the known flower species based on their 
-    measured characteristics."""
+    with different initializations can help identify more stable clusters."""
     st.write(text)
 
 
     if st.button("Begin"):
         # Load the Iris dataset
-        iris = datasets.load_iris()
-        X = iris.data  # Features
-        y = iris.target  # Target labels (species)
+        milk_data = pd.read_csv('milk_grade.csv')
+        X = milk_data.drop(['Grade'])  # Features, dropping the Grade colum
+        y = milk_data['Grade']  # Target
 
         # Define the K-means model with 3 clusters (known number of species)
         kmeans = KMeans(n_clusters=3, random_state=0, n_init=10)
@@ -93,12 +86,12 @@ def app():
         for label, color in zip(unique_labels, colors):
             indices = y_pred == label
             # Use ax.scatter for consistent plotting on the created axis
-            ax.scatter(X[indices, 0], X[indices, 1], label=iris.target_names[label], c=color)
+            ax.scatter(X[indices, 0], X[indices, 6], label=milk_data['Grade'], c=color)
 
         # Add labels and title using ax methods
-        ax.set_xlabel('Sepal length (cm)')
-        ax.set_ylabel('Sepal width (cm)')
-        ax.set_title('Sepal Length vs Width Colored by Predicted Iris Species')
+        ax.set_xlabel('pH Level')
+        ax.set_ylabel('Turbidity')
+        ax.set_title('pH Level vs Turbidity Colored by Predicted Milk Grade')
 
         # Add legend and grid using ax methods
         ax.legend()
